@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+<h1>Welcome to second page </h1>
+{% endblock %}
+
+{% block body %}
+
+    <video id="player" controls autoplay></video>
+    <form action="{{ url_for('cam')}}" method="post">
+        <a id="link">
+            <input type="text" name="count" id="image_id">
+            <input type="button" value="Capture" id="capture"/>
+        </a>
+    </form>
+    <canvas id="canvas" width=320 height=240></canvas>
+   
+    <script>
+        var i = 1;
+       // document.getElementById("image_id").style.display = "none";
+        const player = document.getElementById('player');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const captureButton = document.getElementById('capture');
+
+        const constraints = {
+            video: true,
+        };
+        
+        captureButton.addEventListener('click', () => {
+            context.drawImage(player, 0, 0, canvas.width, canvas.height);
+
+            // Stop all video streams.
+            //player.srcObject.getVideoTracks().forEach(track => track.stop());
+            //Converting the image into URL format using canvas.toDataURL() method.
+            //var data = canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+           // window.location.href = data; // it will save locally
+           
+           
+            link.setAttribute('download', 'img'+i+'.png');
+            link.setAttribute('href', canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+            document.getElementById("image_id").style.value = i;
+            i++;
+            captureButton.submit();
+
+        });
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then((stream) => {
+                // Attach the video stream to the video element and autoplay.
+                player.srcObject = stream;
+            });
+    </script>
+
+
+{% endblock %}
